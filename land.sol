@@ -37,4 +37,10 @@ contract LandMarkeplaceDapp {
         );
         registeredLandCount += 1;
     }
+
+    function getLandDetails(
+        uint landID
+    ) public view returns (LandDetail memory) {
+        return landDetails[landID];
+    }
 }
