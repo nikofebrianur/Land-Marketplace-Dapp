@@ -11,4 +11,5 @@ contract LandSale is LandRegistration {
         mapping(address => uint256) bids;
         address[] bidders;
     }
+    mapping(uint256 => BidDetail) bidDetails;
 }
