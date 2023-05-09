@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: SEE LICENSE IN LICENSE
+// SPDX-License-Identifier: MIT
 pragma solidity >=0.8.2 <0.9.0;
 
 contract LandMarkeplaceDapp {
@@ -14,7 +14,8 @@ contract LandMarkeplaceDapp {
     }
 
     mapping(uint => LandDetail) landDetails;
-    uint registeredLandCount = 0;
+    
+    uint public registeredLandCount = 0;
 
     function registerNewLand(
         uint surveyNo,
