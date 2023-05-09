@@ -14,8 +14,10 @@ contract LandMarkeplaceDapp {
     }
 
     mapping(uint => LandDetail) landDetails;
-    
+
     uint public registeredLandCount = 0;
+
+    bool salesStatus;
 
     function registerNewLand(
         uint surveyNo,
