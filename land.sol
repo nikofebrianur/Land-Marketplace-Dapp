@@ -26,14 +26,15 @@ contract LandMarkeplaceDapp {
         uint area
     ) public {
         landDetails[registeredLandCount] = LandDetail(
-            surveyNo,
-            blockNo,
             province,
             district,
             village,
+            surveyNo,
+            blockNo,
             landValue,
             area,
             false
         );
+        registeredLandCount += 1;
     }
 }
