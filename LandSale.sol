@@ -12,4 +12,16 @@ contract LandSale is LandRegistration {
         address[] bidders;
     }
     mapping(uint256 => BidDetail) bidDetails;
+
+    function bid(uint256 landID) public payable {
+
+    }
+
+    function acceptBid(uint256 landID) public {
+
+    }
+
+    fallback() external {
+        revert();
+    }
 }
