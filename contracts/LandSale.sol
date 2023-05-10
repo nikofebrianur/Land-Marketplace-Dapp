@@ -24,7 +24,7 @@ contract LandSale is LandRegistration {
 
     function acceptBid(uint256 landID) public {
         payable(msg.sender).transfer(bidDetails[landID].highestBid);
-
+        safeTransferFrom(msg.sender, bidDetails[landID].highestBidder, landID);
         for(uint256 i = 0; i < bidDetails[landID].bidders.length; i++) {
             if (bidDetails[landID].bidders[i] == bidDetails[landID].highestBidder) {
                 continue;
