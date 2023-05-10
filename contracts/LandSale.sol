@@ -22,7 +22,15 @@ contract LandSale is LandRegistration {
     }
 
     function acceptBid(uint256 landID) public {
+        payable(msg.sender).transfer(bidDetails[landID].highestBid);
 
+        for(uint256 i = 0; i < bidDetails[landID].bidders.length; i++) {
+            if (bidDetails[landID].bidders[i] == bidDetails[landID].highestBidder) {
+                continue;
+            }
+            payable(bidDetails[landID].bidders[i]).transfer(bidDetails[landID].bids[bidDetails[landID].bidders[i]]);
+        }
+        landDetails[landID].salesStatus = true;
     }
 
     fallback() external {
