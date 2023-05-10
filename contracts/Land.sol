@@ -3,7 +3,10 @@ pragma solidity >=0.8.2 <0.9.0;
 
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol"; 
 
-contract LandRegistration  {
+contract LandRegistration is ERC721  {
+
+    constructor() ERC721("Land", "LND") {}
+    
     struct LandDetail {
         string province;
         string district;
@@ -40,6 +43,7 @@ contract LandRegistration  {
             area,
             false
         );
+        _mint(msg.sender, registeredLandCount);
         registeredLandCount += 1;
     }
 
