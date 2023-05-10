@@ -14,6 +14,7 @@ contract LandSale is LandRegistration {
     mapping(uint256 => BidDetail) bidDetails;
 
     function bid(uint256 landID) public payable {
+        require(msg.sender != ownerOf(landID));
         require(bidDetails[landID].bids[msg.sender] + msg.value > bidDetails[landID].highestBid, "can't bid, make a higher Bid");
         bidDetails[landID].highestBidder = msg.sender;
         bidDetails[landID].bidders.push(msg.sender);
