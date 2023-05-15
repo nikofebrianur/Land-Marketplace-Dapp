@@ -21,6 +21,13 @@ contract("LandSale", function ( accounts ) {
     assert.equal(data[4], 08);
     assert.equal(data[5], 10000);
     assert.equal(data[6], 500);
+  });
 
+  it("Bid for the land asset", async function () {
+    await instance.bid(0, {from: accounts[1], value: 100000});
+  });
+
+  it("Confirmed and close the bidding for the land asset", async function () {
+    await instance.acceptBid(0, {from:accounts[0]});
   });
 });
