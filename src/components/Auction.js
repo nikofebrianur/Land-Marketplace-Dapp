@@ -58,7 +58,7 @@ export default function Auction() {
     let land = {
       surveyNo: "[ Survey No ]",
       district: "[ District Name ]",
-      taluk: "[ Taluk Name ]",
+      province: "[ Province Name ]",
       village: "[ Village Name ]",
       blockNo: "[ Block Number ]",
       area: "[ Area in ares ]",
@@ -150,8 +150,8 @@ export default function Auction() {
               <br />
               <Item>
                 <Typography align="left">
-                  <b>Taluk: </b>
-                  {landData.taluk}
+                  <b>Province: </b>
+                  {landData.province}
                 </Typography>
               </Item>
               <br />

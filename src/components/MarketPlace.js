@@ -9,7 +9,8 @@ import CardActions from "@mui/material/CardActions";
 import Typography from "@mui/material/Typography";
 import { useHistory } from 'react-router-dom';
 
-export default function MarketPlace() {
+export default function MarketPlace(props) {
+  const myContract = props.myContract;
   const history = useHistory();
 
   const redirectHandle = (id) => {
@@ -23,26 +24,21 @@ export default function MarketPlace() {
   }, []);
 
   const getLandDetails = async () => {
+    let landCount = await myContract.methods.registeredLandCount().call();
 
     let landDetailsList = [];
-
-    let newLand = {
-      key: 0,
-      address: "[ Land Owner Address ]",
-      area: "[ Area ]",
-      price: "[ Amount in wei ]",
-      status: true
-    };
-    let newLand2 = {
-      key: 1,
-      address: "[ Land Owner Address ]",
-      area: "[ Area ]",
-      price: "[ Amount in wei ]",
-      status: false
-    };
-    landDetailsList.push(newLand);
-    landDetailsList.push(newLand2);
-    await setLandDetails(landDetailsList);
+    for (let i = 0; i < landCount; i++) {
+      let LandList = await myContract.methods.getLandDetails(i).call();
+      let owner = await myContract.methods.ownerOf(i).call();
+      let newLand = {
+        key: i,
+        address: owner,
+        area: LandList.area,
+        price: LandList.landValue,
+      };
+      landDetailsList.push(newLand);
+    }
+    setLandDetails(landDetailsList);
   };
 
   return (

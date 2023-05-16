@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import Box from "@mui/material/Box";
-import AppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import Tooltip from '@mui/material/Tooltip';
-import IconButton from '@mui/material/IconButton';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import AppBar from "@mui/material/AppBar";
+import Toolbar from "@mui/material/Toolbar";
+import Tooltip from "@mui/material/Tooltip";
+import IconButton from "@mui/material/IconButton";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
 import LandscapeIcon from "@mui/icons-material/Landscape";
@@ -12,34 +12,36 @@ import Typography from "@mui/material/Typography";
 import MenuItem from "@mui/material/MenuItem";
 import Button from "@mui/material/Button";
 import { NavLink } from "react-router-dom";
+import { create } from "ipfs-http-client";
 
 const districts = [
-  "Thiruvanathapuram",
-  "Kollam",
-  "Pathanamthitta",
-  "Alappuzha",
-  "Kottayam",
-  "Idukki",
-  "Ernakulam",
-  "Thrissur",
-  "Palakkad",
-  "Malappuram",
-  "Wayanad",
-  "Kozhikode",
-  "Kannur",
-  "Kasargod",
+  "Banjar",
+  "Banjarbaru",
+  "Barito Kuala",
+  "Hulu Sungai Selatan",
+  "Hulu Sungai Tengah",
+  "Hulu Sungai Utara",
+  "Kotabaru",
+  "Tabalong",
+  "Tanah Bumbu",
+  "Tanah Laut",
+  "Tapin",
 ];
 
-export default function NewLand() {
+export default function NewLand(props) {
+  const myContract = props.myContract;
+  const ethereum = window.ethereum;
+  const web3 = props.web3;
 
+  const ipfs = create("https://ipfs.infura.io:5001/api/v0");
+
+  const [province, setProvince] = useState("");
   const [district, setDistrict] = React.useState("");
-  const [taluk, setTaluk] = useState("");
   const [surveyNo, setSurveyNo] = useState("");
   const [village, setVillage] = useState("");
   const [blockNo, setBlockNo] = useState("");
   const [price, setPrice] = useState("");
   const [area, setArea] = useState("");
-  const [hash, setHash] = useState("");
   const [file, setFile] = useState("");
   const [fileName, setFileName] = useState("");
 
@@ -47,8 +49,8 @@ export default function NewLand() {
     setDistrict(event.target.value);
   };
 
-  const talukChangeHandler = (event) => {
-    setTaluk(event.target.value);
+  const provinceChangeHandler = (event) => {
+    setProvince(event.target.value);
   };
 
   const surveyNoChangeHandler = (event) => {
@@ -78,6 +80,27 @@ export default function NewLand() {
 
   const submitHandler = async (event) => {
     event.preventDefault();
+
+    let url;
+    try {
+      const added = await ipfs.add(file);
+      url = "https://ipfs.infura.io/ipfs/" + added.path;
+    } catch (error) {
+      console.log("Error uploading file: ", error);
+    }
+
+    await myContract.methods
+      .registerNewLand(
+        surveyNo,
+        province,
+        district,
+        village,
+        blockNo,
+        price,
+        area,
+        web3.utils.asciiToHex(url)
+      )
+      .send({ from: ethereum.selectedAddress });
   };
 
   return (
@@ -86,11 +109,10 @@ export default function NewLand() {
         <AppBar position="static">
           <Toolbar>
             <Tooltip title="Back to Marketplace">
-              <IconButton
-                size="large"
-                color="inherit"
-              >
-                <NavLink to="/" ><ArrowBackIcon /></NavLink>
+              <IconButton size="large" color="inherit">
+                <NavLink to="/">
+                  <ArrowBackIcon />
+                </NavLink>
               </IconButton>
             </Tooltip>
             <Typography variant="h5" component="div" sx={{ flexGrow: 1 }}>
@@ -99,7 +121,9 @@ export default function NewLand() {
           </Toolbar>
         </AppBar>
       </Box>
-      <Box sx={{ paddingLeft: 30, paddingTop: 2, flexGrow: 1, maxWidth: "80%" }}>
+      <Box
+        sx={{ paddingLeft: 30, paddingTop: 2, flexGrow: 1, maxWidth: "80%" }}
+      >
         <div>
           <Typography variant="h4">
             Register a Land for Sale!{" "}
@@ -107,7 +131,6 @@ export default function NewLand() {
           </Typography>
         </div>
         <br />
-
         <form noValidate onSubmit={submitHandler}>
           <Grid container spacing={2}>
             <Grid item xs={4}>
@@ -131,11 +154,11 @@ export default function NewLand() {
             <Grid item xs={4}>
               <TextField
                 required
-                label="TALUK"
-                id="taluk"
-                helperText="Provide the taluk name where the land is located"
+                label="PROVINCE"
+                id="province"
+                helperText="Provide the province name where the land is located"
                 variant="outlined"
-                onChange={talukChangeHandler}
+                onChange={provinceChangeHandler}
                 sx={{ width: "100%" }}
               />
             </Grid>
