@@ -1,12 +1,11 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.2 <0.9.0;
 
-import "@openzeppelin/contracts/token/ERC721/ERC721.sol"; 
+import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 
-contract LandRegistration is ERC721  {
-
+contract LandRegistration is ERC721 {
     constructor() ERC721("Land", "LND") {}
-    
+
     struct LandDetail {
         string province;
         string district;
@@ -16,6 +15,7 @@ contract LandRegistration is ERC721  {
         uint landValue; // in wei
         uint area;
         bool salesStatus;
+        bytes documentHash;
     }
 
     mapping(uint => LandDetail) landDetails;
@@ -31,7 +31,8 @@ contract LandRegistration is ERC721  {
         string memory district,
         string memory village,
         uint landValue,
-        uint area
+        uint area,
+        bytes memory documentHash
     ) public {
         landDetails[registeredLandCount] = LandDetail(
             province,
@@ -41,7 +42,8 @@ contract LandRegistration is ERC721  {
             blockNo,
             landValue,
             area,
-            false
+            false,
+            documentHash
         );
         _mint(msg.sender, registeredLandCount);
         registeredLandCount += 1;
